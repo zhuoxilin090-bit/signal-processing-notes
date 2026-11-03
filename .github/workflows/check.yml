@@ -1,0 +1,34 @@
+name: Check Python scripts
+
+# 触发时机：往 main 推代码时、以及提 Pull Request 时
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  run-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 取出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 语法检查（全部 .py 文件能否编译）
+        run: python -m py_compile *.py
+
+      - name: 逐个运行脚本（无界面模式，只看会不会报错）
+        env:
+          MPLBACKEND: Agg
+        run: |
+          for f in *.py; do
+            echo "===== $f ====="
+            timeout 120 python "$f"
+          done

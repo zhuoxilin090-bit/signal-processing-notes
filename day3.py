@@ -7,7 +7,6 @@ T = 1.0  # 观察 1 秒
 t = np.linspace(0, T, 1000)
 
 # --- 2. 逐步叠加奇次谐波 ---
-y_square = np.zeros_like(t)
 harmonics_to_add = [1, 3, 5, 7, 9, 15, 31]  # 要叠加到的最高谐波次数
 
 plt.figure(figsize=(10, 6))
@@ -16,7 +15,7 @@ for N in harmonics_to_add:
     # 重新从零开始累加到第 N 次谐波
     y_sum = np.zeros_like(t)
     for n in range(1, N + 1, 2):  # 1, 3, 5, ..., N
-        y_sum += (1 / n) * np.sin(2 * np.pi * (n * f0) * t)
+        y_sum += (4 / (np.pi * n)) * np.sin(2 * np.pi * (n * f0) * t)
 
     # 画出当前叠加的结果
     plt.plot(t, y_sum, label=f"Up to {N}th Harmonic")
@@ -29,4 +28,4 @@ plt.legend(loc="upper right")
 plt.tight_layout()
 plt.show()
 
-#幅值按 $1/n$ 衰减： (1 / n) * np.sin(...) 表示谐波次数越高（$n$ 越大），它的能量/幅值就越小。
+#方波的傅里叶级数：第 n 次奇次谐波的幅值是 $4/(n\pi)$，按 $1/n$ 衰减——谐波次数越高，幅值越小。少了 $4/\pi$ 这个系数，叠出来的“方波”幅值只有 $\pi/4 \approx 0.785$，不是 1。

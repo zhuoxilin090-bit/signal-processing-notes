@@ -11,6 +11,7 @@ t = np.linspace(0, T, N, endpoint=False)
 clean_signal = np.sin(2 * np.pi * 10 * t)
 
 # 高频噪声：200 Hz 的干扰信号 + 随机高斯白噪声
+np.random.seed(42)  # 固定随机种子，保证每次运行结果可复现
 noise = 0.6 * np.sin(2 * np.pi * 200 * t) + np.random.normal(0, 0.3, N)
 
 # 最终叠加的带噪信号 (在时域上看起来一片混乱)
